@@ -2,17 +2,19 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, useUser } from '@clerk/nextjs'
 import Logo from './Logo'
 import { Analytics, Course, Teacher } from './Icon'
+import { Button } from '@/components/ui/button'
 
 const routes = [
-  { name: 'Course', href: '/course' },
+  { name: 'Courses', href: '/courses' },
   { name: 'Teacher', href: '/teacher' },
 ]
 
 const Navbar = () => {
   const pathname = usePathname()
+  const { isSignedIn } = useUser()
 
   return (
     <div className="border border-b-2 p-3 flex justify-between">
@@ -39,7 +41,13 @@ const Navbar = () => {
             )
           })}
         </ul>
-        <UserButton afterSignOutUrl="/" />
+        {!isSignedIn ? (
+          <Link href="/sign-in">
+            <Button>Login</Button>
+          </Link>
+        ) : (
+          <UserButton afterSignOutUrl="/" />
+        )}
       </div>
     </div>
   )
