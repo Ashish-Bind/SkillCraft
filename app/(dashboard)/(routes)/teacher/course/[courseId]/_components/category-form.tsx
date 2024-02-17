@@ -22,24 +22,30 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Edit } from '@/app/(dashboard)/_components/Icon'
+import { Combobox } from '@/components/ui/combobox'
 
-interface DescriptionFormProps {
+interface CategoryFormProps {
   initialData: {
-    description: string | null
+    categoryId: string | null
   }
   courseId: string
+  options: { label: string; value: string }[]
 }
 
 const formSchema = z.object({
-  description: z.string().min(1, { message: 'Description is required' }),
+  categoryId: z.string().min(1, { message: 'Category is required' }),
 })
 
-const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+const CategoryForm = ({
+  initialData,
+  courseId,
+  options,
+}: CategoryFormProps) => {
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData.description || '',
+      categoryId: initialData.categoryId || '',
     },
   })
 
@@ -54,17 +60,22 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const res = await axios.patch(`/api/courses/${courseId}`, values)
-      toast.success('Description updated')
+      toast.success('Category updated')
       toggleEdit()
       router.refresh()
     } catch (error) {
       toast.error('Something went wrong!')
     }
   }
+
+  const selectedOption = options.find(
+    (option) => option.value === initialData.categoryId
+  )
+
   return (
     <div className="mt-6 bg-stone-200 border border-stone-200 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <div className="font-bold">Course Description</div>
+        <div className="font-bold">Course Category</div>
         <Button
           className="flex gap-2 items-center"
           variant="ghost"
@@ -73,7 +84,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           {!isEditing ? (
             <>
               <Edit />
-              Edit Description
+              Edit Category
             </>
           ) : (
             <>Cancel</>
@@ -81,8 +92,12 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
         </Button>
       </div>
       {!isEditing && (
-        <div className="font-normal text-sm">
-          {initialData.description || 'No description'}
+        <div
+          className={`font-normal text-sm ${
+            selectedOption?.label || 'font-italic'
+          }`}
+        >
+          {selectedOption?.label || 'No Category'}
         </div>
       )}
       {isEditing && (
@@ -90,15 +105,11 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-2 mt-2">
             <FormField
               control={form.control}
-              name="description"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
-                      disabled={isSubmitting}
-                      placeholder="Describe about your course"
-                      {...field}
-                    />
+                    <Combobox options={options} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -116,4 +127,4 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   )
 }
 
-export default DescriptionForm
+export default CategoryForm

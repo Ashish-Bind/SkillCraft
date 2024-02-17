@@ -31,9 +31,7 @@ const Navbar = () => {
               <li
                 key={route.name}
                 className={`hover:text-black font-medium hover:underline ${
-                  pathname.includes(route.href)
-                    ? 'text-black underline'
-                    : 'text-gray-400'
+                  pathname.includes(route.href) ? 'text-black' : 'text-gray-400'
                 }`}
               >
                 <Link href={route.href}>{route.name}</Link>

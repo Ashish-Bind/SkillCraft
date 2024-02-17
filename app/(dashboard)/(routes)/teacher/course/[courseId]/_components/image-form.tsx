@@ -2,21 +2,7 @@
 
 import axios from 'axios'
 import * as z from 'zod'
-import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import { zodResolver } from '@hookform/resolvers/zod'
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormLabel,
-  FormMessage,
-  FormDescription,
-  FormItem,
-} from '@/components/ui/form'
-
-import { Textarea } from '@/components/ui/textarea'
 
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -38,20 +24,12 @@ const formSchema = z.object({
 
 const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const router = useRouter()
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      imgUrl: initialData.imgUrl || '',
-    },
-  })
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
   const toggleEdit = () => {
     setIsEditing((prev) => !prev)
   }
-
-  const { isSubmitting, isValid } = form.formState
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -63,8 +41,9 @@ const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
       toast.error('Something went wrong!')
     }
   }
+
   return (
-    <div className="mt-6 bg-zinc-200 border rounded-md p-4">
+    <div className="mt-6 bg-stone-200 border border-stone-200 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="font-bold">Course Thumbnail</div>
         <Button
