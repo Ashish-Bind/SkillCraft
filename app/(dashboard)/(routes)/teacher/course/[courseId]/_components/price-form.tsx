@@ -17,27 +17,27 @@ import {
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Edit } from '@/app/(dashboard)/_components/Icon'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import Icon from '@/components/providers/icons-lucide'
+import formatPrice from '@/lib/format'
 
-interface TitleFormProps {
+interface PriceFormProps {
   initialData: {
-    title: string
+    price: number
   }
   courseId: string
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: 'Title is required' }),
+  price: z.coerce.number(),
 })
 
-const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
+const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: initialData || undefined,
   })
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -51,7 +51,7 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const res = await axios.patch(`/api/courses/${courseId}`, values)
-      toast.success('Title updated')
+      toast.success('Price updated')
       toggleEdit()
       router.refresh()
     } catch (error) {
@@ -60,9 +60,9 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   }
 
   return (
-    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
+    <div className="my-4 bg-gray-200 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <div className="font-bold">Course Title</div>
+        <div className="font-bold">Price</div>
         <Button
           className="flex gap-2 items-center"
           variant="ghost"
@@ -71,26 +71,32 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
           {!isEditing ? (
             <>
               <Icon name="Pencil" color="black" size={18} />
-              Edit Title
+              Edit Price
             </>
           ) : (
             <>Cancel</>
           )}
         </Button>
       </div>
-      {!isEditing && <div className="text-sm">{initialData.title}</div>}
+      {!isEditing && (
+        <div className={`text-sm ${!initialData.price && 'italic'}`}>
+          {initialData.price ? formatPrice(initialData.price) : 'No price'}
+        </div>
+      )}
       {isEditing && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-2 mt-2">
             <FormField
               control={form.control}
-              name="title"
+              name="price"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
+                      type="number"
+                      step="10"
                       disabled={isSubmitting}
-                      placeholder="Change your title"
+                      placeholder="e.g ₹1,000"
                       {...field}
                     />
                   </FormControl>
@@ -110,4 +116,4 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   )
 }
 
-export default TitleForm
+export default PriceForm

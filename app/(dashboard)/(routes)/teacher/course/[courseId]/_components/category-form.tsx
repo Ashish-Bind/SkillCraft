@@ -16,13 +16,12 @@ import {
   FormItem,
 } from '@/components/ui/form'
 
-import { Textarea } from '@/components/ui/textarea'
-
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Edit } from '@/app/(dashboard)/_components/Icon'
 import { Combobox } from '@/components/ui/combobox'
+import Icon from '@/components/providers/icons-lucide'
 
 interface CategoryFormProps {
   initialData: {
@@ -73,7 +72,7 @@ const CategoryForm = ({
   )
 
   return (
-    <div className="mt-6 bg-stone-200 border border-stone-200 rounded-md p-4">
+    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="font-bold">Course Category</div>
         <Button
@@ -83,7 +82,7 @@ const CategoryForm = ({
         >
           {!isEditing ? (
             <>
-              <Edit />
+              <Icon name="Pencil" color="black" size={18} />
               Edit Category
             </>
           ) : (

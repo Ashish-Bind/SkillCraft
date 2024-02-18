@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import { Edit, Plus, ImageIcon } from '@/app/(dashboard)/_components/Icon'
 import Image from 'next/image'
 import { FileUpload } from '@/components/file-upload'
+import Icon from '@/components/providers/icons-lucide'
 
 interface ImageFormProps {
   initialData: {
@@ -43,7 +44,7 @@ const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   }
 
   return (
-    <div className="mt-6 bg-stone-200 border border-stone-200 rounded-md p-4">
+    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="font-bold">Course Thumbnail</div>
         <Button
@@ -54,12 +55,12 @@ const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           {!isEditing ? (
             !initialData.imgUrl ? (
               <>
-                <Plus />
+                <Icon name="PlusCircle" color="black" size={18} />
                 Add new Image
               </>
             ) : (
               <>
-                <Edit />
+                <Icon name="Pencil" color="black" size={18} />
                 Edit Thumbnail
               </>
             )

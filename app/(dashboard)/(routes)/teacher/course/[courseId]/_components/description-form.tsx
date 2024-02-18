@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Edit } from '@/app/(dashboard)/_components/Icon'
+import Icon from '@/components/providers/icons-lucide'
 
 interface DescriptionFormProps {
   initialData: {
@@ -62,7 +63,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
     }
   }
   return (
-    <div className="mt-6 bg-stone-200 border border-stone-200 rounded-md p-4">
+    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="font-bold">Course Description</div>
         <Button
@@ -72,7 +73,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
         >
           {!isEditing ? (
             <>
-              <Edit />
+              <Icon name="Pencil" color="black" size={18} />
               Edit Description
             </>
           ) : (
