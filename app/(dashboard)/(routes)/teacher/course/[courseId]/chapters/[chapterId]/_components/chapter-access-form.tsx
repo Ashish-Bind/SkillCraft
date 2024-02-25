@@ -15,28 +15,35 @@ import {
   FormDescription,
   FormItem,
 } from '@/components/ui/form'
+
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import Icon from '@/components/providers/icons-lucide'
-import formatPrice from '@/lib/format'
-import { Course } from '@prisma/client'
+import { Chapter } from '@prisma/client'
+import { Checkbox } from '@/components/ui/checkbox'
 
-interface PriceFormProps {
-  initialData: Course
+interface ChapterAccessFormProps {
+  initialData: Chapter
   courseId: string
+  chapterId: string
 }
 
 const formSchema = z.object({
-  price: z.coerce.number(),
+  isFree: z.boolean().default(false),
 })
 
-const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
+const ChapterAccessForm = ({
+  initialData,
+  courseId,
+  chapterId,
+}: ChapterAccessFormProps) => {
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData?.price || undefined,
+    defaultValues: {
+      isFree: Boolean(initialData.isFree),
+    },
   })
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -49,19 +56,21 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.patch(`/api/courses/${courseId}`, values)
-      toast.success('Price updated')
+      const res = await axios.patch(
+        `/api/courses/${courseId}/chapters/${chapterId}`,
+        values
+      )
+      toast.success('Chapter description updated')
       toggleEdit()
       router.refresh()
     } catch (error) {
       toast.error('Something went wrong!')
     }
   }
-
   return (
-    <div className="my-4 bg-gray-200 border border-gray-300 rounded-md p-4">
+    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <div className="font-bold">Price</div>
+        <div className="font-bold">Chapter Access</div>
         <Button
           className="flex gap-2 items-center"
           variant="ghost"
@@ -70,7 +79,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
           {!isEditing ? (
             <>
               <Icon name="Pencil" color="black" size={18} />
-              Edit Price
+              Edit access
             </>
           ) : (
             <>Cancel</>
@@ -78,8 +87,14 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
         </Button>
       </div>
       {!isEditing && (
-        <div className={`text-sm ${!initialData.price && 'italic'}`}>
-          {initialData.price ? formatPrice(initialData.price) : 'No price'}
+        <div
+          className={`font-semibold text-sm italic ${
+            !initialData.isFree ? 'text-emerald-500' : 'text-red-500'
+          }`}
+        >
+          {initialData.isFree
+            ? '*This chapter is free for preview'
+            : '*This chapter can be only be previewed after purchase'}
         </div>
       )}
       {isEditing && (
@@ -87,19 +102,19 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-2 mt-2">
             <FormField
               control={form.control}
-              name="price"
+              name="isFree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row items-start space-x-2 space-y-0 px-2 py-4">
                   <FormControl>
-                    <Input
-                      type="number"
-                      step="10"
-                      disabled={isSubmitting}
-                      placeholder="e.g ₹1,000"
-                      {...field}
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="space-y-1 leading-none">
+                    Check this box if you want to make this chapter free for
+                    preview
+                  </div>
                 </FormItem>
               )}
             ></FormField>
@@ -115,4 +130,4 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   )
 }
 
-export default PriceForm
+export default ChapterAccessForm

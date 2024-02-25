@@ -14,7 +14,7 @@ const routes = [
 
 const Navbar = () => {
   const pathname = usePathname()
-  const { isSignedIn } = useUser()
+  const { isSignedIn, user } = useUser()
 
   return (
     <div className="border border-b-2 p-3 flex justify-between">

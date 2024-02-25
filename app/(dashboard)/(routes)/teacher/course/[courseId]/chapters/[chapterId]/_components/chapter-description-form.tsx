@@ -15,28 +15,39 @@ import {
   FormDescription,
   FormItem,
 } from '@/components/ui/form'
+
+import { Textarea } from '@/components/ui/textarea'
+
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import { Edit } from '@/app/(dashboard)/_components/Icon'
 import Icon from '@/components/providers/icons-lucide'
-import formatPrice from '@/lib/format'
-import { Course } from '@prisma/client'
+import { Chapter } from '@prisma/client'
+import { TextEditor } from '@/components/text-editor'
+import { Preview } from '@/components/preview'
 
-interface PriceFormProps {
-  initialData: Course
+interface ChapterDescriptionFormProps {
+  initialData: Chapter
   courseId: string
+  chapterId: string
 }
 
 const formSchema = z.object({
-  price: z.coerce.number(),
+  description: z.string().min(1),
 })
 
-const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
+const ChapterDescriptionForm = ({
+  initialData,
+  courseId,
+  chapterId,
+}: ChapterDescriptionFormProps) => {
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData?.price || undefined,
+    defaultValues: {
+      description: initialData.description || '',
+    },
   })
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -49,19 +60,21 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.patch(`/api/courses/${courseId}`, values)
-      toast.success('Price updated')
+      const res = await axios.patch(
+        `/api/courses/${courseId}/chapters/${chapterId}`,
+        values
+      )
+      toast.success('Chapter description updated')
       toggleEdit()
       router.refresh()
     } catch (error) {
       toast.error('Something went wrong!')
     }
   }
-
   return (
-    <div className="my-4 bg-gray-200 border border-gray-300 rounded-md p-4">
+    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <div className="font-bold">Price</div>
+        <div className="font-bold">Chapter Description</div>
         <Button
           className="flex gap-2 items-center"
           variant="ghost"
@@ -70,7 +83,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
           {!isEditing ? (
             <>
               <Icon name="Pencil" color="black" size={18} />
-              Edit Price
+              Edit Description
             </>
           ) : (
             <>Cancel</>
@@ -78,8 +91,11 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
         </Button>
       </div>
       {!isEditing && (
-        <div className={`text-sm ${!initialData.price && 'italic'}`}>
-          {initialData.price ? formatPrice(initialData.price) : 'No price'}
+        <div className="font-normal text-sm">
+          {!initialData.description && 'No description'}
+          {initialData.description && (
+            <Preview value={initialData.description} />
+          )}
         </div>
       )}
       {isEditing && (
@@ -87,17 +103,11 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-2 mt-2">
             <FormField
               control={form.control}
-              name="price"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="number"
-                      step="10"
-                      disabled={isSubmitting}
-                      placeholder="e.g ₹1,000"
-                      {...field}
-                    />
+                    <TextEditor {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,4 +125,4 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   )
 }
 
-export default PriceForm
+export default ChapterDescriptionForm

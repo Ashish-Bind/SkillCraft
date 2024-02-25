@@ -1,4 +1,3 @@
-import { Carousel } from '@/app/(dashboard)/_components/Icon'
 import { db } from '@/lib/db'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
@@ -9,6 +8,7 @@ import CategoryForm from './_components/category-form'
 import Icon from '@/components/providers/icons-lucide'
 import PriceForm from './_components/price-form'
 import AttachmentForm from './_components/attachment-form'
+import ChaptersForm from './_components/chapters-form'
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth()
@@ -20,11 +20,17 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
+      userId: userId,
     },
     include: {
       attachments: {
         orderBy: {
           createdAt: 'desc',
+        },
+      },
+      chapters: {
+        orderBy: {
+          position: 'asc',
         },
       },
     },
@@ -46,6 +52,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.imgUrl,
     course.price,
     course.categoryId,
+    course.chapters.some((chapter) => chapter.isPublished),
   ]
 
   const totalFields = requiredFields.length
@@ -67,7 +74,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         <div>
           <div className="flex items-center gap-2">
             <Icon name="PanelsTopLeft" />
-            <h2 className="font-medium">Customize your Course</h2>
+            <h2 className="font-semibold">Customize your Course</h2>
           </div>
           <TitleForm initialData={course} courseId={course.id} />
           <DescriptionForm initialData={course} courseId={course.id} />
@@ -83,25 +90,25 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             })}
           />
         </div>
-        <div className="my-2">
+        <div className="">
           <div className="my-2">
             <div className="flex items-center gap-2">
               <Icon name="ListChecks" />
-              <h2 className="font-medium">Course Chapters</h2>
+              <h2 className="font-semibold">Course Chapters</h2>
             </div>
-            <div>TODO: Course Chapters</div>
+            <ChaptersForm initialData={course} courseId={course.id} />
           </div>
           <div className="my-2">
             <div className="flex items-center gap-2">
               <Icon name="IndianRupee" />
-              <h2 className="font-medium">Sell your Course</h2>
+              <h2 className="font-semibold">Sell your Course</h2>
             </div>
             <PriceForm initialData={course} courseId={course.id} />
           </div>
           <div className="my-2">
             <div className="flex items-center gap-2">
               <Icon name="FileSymlink" />
-              <h2 className="font-medium">Resources & Attachments</h2>
+              <h2 className="font-semibold">Resources & Attachments</h2>
             </div>
             <AttachmentForm initialData={course} courseId={course.id} />
           </div>
