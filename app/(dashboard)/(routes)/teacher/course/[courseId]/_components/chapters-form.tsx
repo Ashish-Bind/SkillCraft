@@ -85,6 +85,18 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     router.push(`/teacher/course/${courseId}/chapters/${id}`)
   }
 
+  const onDelete = async (id: string) => {
+    try {
+      setIsUpdating(true)
+      const res = await axios.delete(`/api/courses/${courseId}/chapters/${id}`)
+      toast.success('Chapter Deleted')
+    } catch (error) {
+      toast.error('Something went wrong!')
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
   return (
     <div className="mt-4 bg-gray-200 border border-gray-300 rounded-md p-4 relative">
       {isUpdating && (
@@ -117,6 +129,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
             <ChaptersList
               onEdit={onEdit}
               onReorder={onReorder}
+              onDelete={onDelete}
               items={initialData.chapters || []}
             />
           )}

@@ -88,10 +88,10 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
             {initialData.attachments.map((attachment) => (
               <div
                 key={attachment.id}
-                className="flex items-center gap-2 bg-orange-200 border border-orange-400 p-2 rounded-md"
+                className="flex items-center gap-2 bg-orange-300/60 border border-orange-500 p-2 rounded-md"
               >
                 <Icon name="File" size={16} />
-                <p className="text-sm line-clamp-1 text-orange-500">
+                <p className="text-sm line-clamp-1 font-medium">
                   {attachment.name}
                 </p>
                 {deleteId === attachment.id ? (

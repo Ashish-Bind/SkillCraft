@@ -13,11 +13,17 @@ import { Badge } from '@/components/ui/badge'
 
 interface ChaptersListProps {
   onEdit: (id: string) => void
+  onDelete: (id: string) => void
   onReorder: (updateData: { id: string; position: number }[]) => void
   items: Chapter[]
 }
 
-const ChaptersList = ({ onEdit, onReorder, items }: ChaptersListProps) => {
+const ChaptersList = ({
+  onEdit,
+  onReorder,
+  items,
+  onDelete,
+}: ChaptersListProps) => {
   const [chapters, setChapters] = useState(items)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -95,6 +101,12 @@ const ChaptersList = ({ onEdit, onReorder, items }: ChaptersListProps) => {
                           onClick={() => onEdit(chapter.id)}
                         >
                           <Icon name="Pencil" size={16} color="black" />
+                        </div>
+                        <div
+                          className="cursor-pointer hover:opacity-70 transition"
+                          onClick={() => onDelete(chapter.id)}
+                        >
+                          <Icon name="Trash2" size={16} color="black" />
                         </div>
                       </div>
                     </div>

@@ -81,7 +81,13 @@ const ChapterVideoForm = ({
             <Icon name="MonitorPlay" color="black" />
           </div>
         ) : (
-          <div className="relative aspect-video mt-2">Video uploaded</div>
+          <div className="relative aspect-video mt-2">
+            <video
+              src={initialData.videoUrl}
+              controls
+              className="rounded-md"
+            ></video>
+          </div>
         ))}
 
       {isEditing && (

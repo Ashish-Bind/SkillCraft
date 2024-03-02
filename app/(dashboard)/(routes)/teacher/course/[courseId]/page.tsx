@@ -9,6 +9,9 @@ import Icon from '@/components/providers/icons-lucide'
 import PriceForm from './_components/price-form'
 import AttachmentForm from './_components/attachment-form'
 import ChaptersForm from './_components/chapters-form'
+import CourseActions from './_components/course-actions'
+import { Banner } from '@/components/banner'
+import Back from '@/components/back-button'
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth()
@@ -52,7 +55,9 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.imgUrl,
     course.price,
     course.categoryId,
-    course.chapters.some((chapter) => chapter.isPublished),
+    course.chapters.some(
+      (chapter) => chapter.isPublished === true && chapter.isFree === true
+    ),
   ]
 
   const totalFields = requiredFields.length
@@ -60,61 +65,86 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
   const completionText = `${completedFields}/${totalFields}`
 
+  const isComplete = requiredFields.every(Boolean)
+
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-2">
-          <h1 className="font-bold text-3xl">Course Setup</h1>
-          <p className="text-stone-500 text-sm">
-            Complete all fields [{completionText}]
-          </p>
+    <>
+      {course.isPublished ? (
+        <Banner
+          label="This course is published. It will be visible to the customers."
+          variant={'success'}
+        />
+      ) : (
+        <Banner
+          label="This course is unpublished. It will not be visible to the customers."
+          variant={'warning'}
+        />
+      )}
+
+      <div className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <h1 className="font-bold text-3xl">Course Setup</h1>
+            <p className="text-stone-500 text-sm">
+              Complete all fields [{completionText}]
+            </p>
+          </div>
+
+          <div className="flex gap-4">
+            <CourseActions
+              disabled={!isComplete}
+              courseId={params.courseId}
+              isPublished={course.isPublished}
+            />
+            <Back link="/teacher" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <Icon name="PanelsTopLeft" />
+              <h2 className="font-semibold">Customize your Course</h2>
+            </div>
+            <TitleForm initialData={course} courseId={course.id} />
+            <DescriptionForm initialData={course} courseId={course.id} />
+            <ImageForm initialData={course} courseId={course.id} />
+            <CategoryForm
+              initialData={course}
+              courseId={course.id}
+              options={categories.map((category) => {
+                return {
+                  label: category.name,
+                  value: category.id,
+                }
+              })}
+            />
+          </div>
+          <div className="">
+            <div className="my-2">
+              <div className="flex items-center gap-2">
+                <Icon name="ListChecks" />
+                <h2 className="font-semibold">Course Chapters</h2>
+              </div>
+              <ChaptersForm initialData={course} courseId={course.id} />
+            </div>
+            <div className="my-2">
+              <div className="flex items-center gap-2">
+                <Icon name="IndianRupee" />
+                <h2 className="font-semibold">Sell your Course</h2>
+              </div>
+              <PriceForm initialData={course} courseId={course.id} />
+            </div>
+            <div className="my-2">
+              <div className="flex items-center gap-2">
+                <Icon name="FileSymlink" />
+                <h2 className="font-semibold">Resources & Attachments</h2>
+              </div>
+              <AttachmentForm initialData={course} courseId={course.id} />
+            </div>
+          </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <Icon name="PanelsTopLeft" />
-            <h2 className="font-semibold">Customize your Course</h2>
-          </div>
-          <TitleForm initialData={course} courseId={course.id} />
-          <DescriptionForm initialData={course} courseId={course.id} />
-          <ImageForm initialData={course} courseId={course.id} />
-          <CategoryForm
-            initialData={course}
-            courseId={course.id}
-            options={categories.map((category) => {
-              return {
-                label: category.name,
-                value: category.id,
-              }
-            })}
-          />
-        </div>
-        <div className="">
-          <div className="my-2">
-            <div className="flex items-center gap-2">
-              <Icon name="ListChecks" />
-              <h2 className="font-semibold">Course Chapters</h2>
-            </div>
-            <ChaptersForm initialData={course} courseId={course.id} />
-          </div>
-          <div className="my-2">
-            <div className="flex items-center gap-2">
-              <Icon name="IndianRupee" />
-              <h2 className="font-semibold">Sell your Course</h2>
-            </div>
-            <PriceForm initialData={course} courseId={course.id} />
-          </div>
-          <div className="my-2">
-            <div className="flex items-center gap-2">
-              <Icon name="FileSymlink" />
-              <h2 className="font-semibold">Resources & Attachments</h2>
-            </div>
-            <AttachmentForm initialData={course} courseId={course.id} />
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
 

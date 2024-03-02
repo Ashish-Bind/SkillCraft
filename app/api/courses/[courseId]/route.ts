@@ -8,7 +8,7 @@ export async function PATCH(
 ) {
   try {
     const { userId } = auth()
-    const {courseId} = params
+    const { courseId } = params
     const values = await req.json()
 
     if (!userId) {
@@ -16,16 +16,42 @@ export async function PATCH(
     }
 
     const course = await db.course.update({
-      where:{
+      where: {
         userId,
-        id:courseId
+        id: courseId,
       },
-      data:{
-        ...values
-      }
+      data: {
+        ...values,
+      },
     })
 
     return NextResponse.json(course)
+  } catch (err) {
+    console.log('[COURSE_ID]', err)
+    return new NextResponse('Internal Error', { status: 500 })
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { courseId: string } }
+) {
+  try {
+    const { userId } = auth()
+    const { courseId } = params
+
+    if (!userId) {
+      return new NextResponse('Unauthorized access', { status: 401 })
+    }
+
+    const deletedCourse = await db.course.delete({
+      where: {
+        userId,
+        id: courseId,
+      },
+    })
+
+    return NextResponse.json(deletedCourse)
   } catch (err) {
     console.log('[COURSE_ID]', err)
     return new NextResponse('Internal Error', { status: 500 })

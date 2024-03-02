@@ -24,3 +24,24 @@ export async function POST(req: Request) {
     return new NextResponse('Internal error', { status: 500 })
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const { userId } = auth()
+
+    if (!userId) {
+      return new NextResponse('Unauthorized user', { status: 401 })
+    }
+
+    const createdCourses = await db.course.findMany({
+      where: {
+        userId,
+      },
+    })
+
+    return NextResponse.json(createdCourses)
+  } catch (error) {
+    console.log('[COURSES]', error)
+    return new NextResponse('Internal error', { status: 500 })
+  }
+}

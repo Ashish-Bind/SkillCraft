@@ -24,8 +24,8 @@ const Navbar = () => {
           Skill<span className="font-normal">Craft</span>
         </p>
       </Link>
-      <div className="flex items-center gap-2">
-        <ul className="flex gap-2">
+      <div className="flex items-center gap-4">
+        <ul className="flex gap-4">
           {routes.map((route) => {
             return (
               <li
@@ -41,7 +41,7 @@ const Navbar = () => {
         </ul>
         {!isSignedIn ? (
           <Link href="/sign-in">
-            <Button>Login</Button>
+            <Button className="text-sm">Login</Button>
           </Link>
         ) : (
           <UserButton afterSignOutUrl="/" />
