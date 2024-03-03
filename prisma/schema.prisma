@@ -142,7 +142,7 @@ model Rating {
   courseId String @db.ObjectId
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  rating   Int
+  rating   Float
   feedback String?
 
   createdAt DateTime @default(now())

@@ -68,7 +68,7 @@ const ChapterAccessForm = ({
     }
   }
   return (
-    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
+    <div className="mt-6 bg-gray-100 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="font-bold">Chapter Access</div>
         <Button

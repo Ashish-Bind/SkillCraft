@@ -8,7 +8,9 @@ import { Analytics, Course, Teacher } from './Icon'
 import { Button } from '@/components/ui/button'
 
 const routes = [
-  { name: 'Courses', href: '/courses' },
+  { name: 'Home', href: '/' },
+  { name: 'Browse', href: '/courses' },
+  { name: 'My Courses', href: '/my-courses' },
   { name: 'Teacher', href: '/teacher' },
 ]
 
@@ -27,16 +29,31 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         <ul className="flex gap-4">
           {routes.map((route) => {
-            return (
-              <li
-                key={route.name}
-                className={`hover:text-black font-medium hover:underline ${
-                  pathname.includes(route.href) ? 'text-black' : 'text-gray-400'
-                }`}
-              >
-                <Link href={route.href}>{route.name}</Link>
-              </li>
-            )
+            if (route.href === '/') {
+              return (
+                <li
+                  key={route.name}
+                  className={`hover:text-black font-medium hover:underline ${
+                    pathname === route.href ? 'text-black' : 'text-gray-400'
+                  }`}
+                >
+                  <Link href={route.href}>{route.name}</Link>
+                </li>
+              )
+            } else {
+              return (
+                <li
+                  key={route.name}
+                  className={`hover:text-black font-medium hover:underline ${
+                    pathname.includes(route.href)
+                      ? 'text-black'
+                      : 'text-gray-400'
+                  }`}
+                >
+                  <Link href={route.href}>{route.name}</Link>
+                </li>
+              )
+            }
           })}
         </ul>
         {!isSignedIn ? (

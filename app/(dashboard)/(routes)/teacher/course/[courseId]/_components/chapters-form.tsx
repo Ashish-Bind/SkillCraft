@@ -98,7 +98,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   }
 
   return (
-    <div className="mt-4 bg-gray-200 border border-gray-300 rounded-md p-4 relative">
+    <div className="mt-4 bg-gray-100 border border-gray-300 rounded-md p-4 relative">
       {isUpdating && (
         <div className="w-full h-full bg-gray-500/20 top-0 right-0 flex items-center justify-center absolute">
           <Loader2 className="animate-spin" />

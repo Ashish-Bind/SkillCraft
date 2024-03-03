@@ -1,19 +1,20 @@
 'use client'
 
 import Icon from '@/components/providers/icons-lucide'
+import StarRatings from '@/components/star-ratings'
 import { Button } from '@/components/ui/button'
 import formatPrice from '@/lib/format'
-import { Course } from '@prisma/client'
+import { Course, Rating } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
 
 interface CourseCardProps {
-  data: Course
+  data: Course & { rating: Rating[] }
 }
 
 const CourseCard = ({ data }: CourseCardProps) => {
   return (
-    <div className="bg-gray-200 border border-gray-300 p-4 rounded-md grid gap-2">
+    <div className="bg-gray-100 border border-gray-300 p-4 rounded-md grid gap-2">
       <div className="text-lg font-bold line-clamp-2">{data.title}</div>
       <div className="relative aspect-video ">
         {data.imgUrl ? (
@@ -30,6 +31,9 @@ const CourseCard = ({ data }: CourseCardProps) => {
         )}
       </div>
       <p className="font-medium text-sm">{formatPrice(data.price ?? 0)}</p>
+      <p className="font-medium text-sm">
+        <StarRatings ratings={data.rating} />
+      </p>
       <Button>
         <Link
           href={`/teacher/course/${data.id}`}

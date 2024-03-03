@@ -1,6 +1,6 @@
 'use client'
 
-import { Course } from '@prisma/client'
+import { Course, Rating } from '@prisma/client'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import CourseCard from './course-card'

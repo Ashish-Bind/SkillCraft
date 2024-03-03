@@ -37,6 +37,9 @@ export async function GET(req: Request) {
       where: {
         userId,
       },
+      include: {
+        rating: true,
+      },
     })
 
     return NextResponse.json(createdCourses)

@@ -3,6 +3,7 @@
 import { ConfirmModal } from '@/components/modals/confirm-modal'
 import Icon from '@/components/providers/icons-lucide'
 import { Button } from '@/components/ui/button'
+import { useConfettiStore } from '@/hooks/use-confetti-store'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -20,6 +21,7 @@ const CourseActions = ({
   isPublished,
 }: CourseActionsProps) => {
   const router = useRouter()
+  const confetti = useConfettiStore()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -36,6 +38,7 @@ const CourseActions = ({
           value: !isPublished,
         })
         toast.success('Course Published')
+        confetti.onOpen()
       }
 
       router.refresh()

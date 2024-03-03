@@ -61,7 +61,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
   }
 
   return (
-    <div className="my-4 bg-gray-200 border border-gray-300 rounded-md p-4">
+    <div className="my-4 bg-gray-100 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="font-bold">Course Attachments</div>
         <Button

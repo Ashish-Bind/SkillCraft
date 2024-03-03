@@ -49,7 +49,7 @@ const ChapterVideoForm = ({
   }
 
   return (
-    <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md p-4">
+    <div className="mt-6 bg-gray-100 border border-gray-300 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         <div className="font-bold">Chapter Video</div>
         <Button
@@ -82,11 +82,9 @@ const ChapterVideoForm = ({
           </div>
         ) : (
           <div className="relative aspect-video mt-2">
-            <video
-              src={initialData.videoUrl}
-              controls
-              className="rounded-md"
-            ></video>
+            <video controls className="rounded-md">
+              <source src={initialData.videoUrl} type="video/mp4" />
+            </video>
           </div>
         ))}
 
