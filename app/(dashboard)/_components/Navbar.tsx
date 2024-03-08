@@ -27,13 +27,13 @@ const Navbar = () => {
         </p>
       </Link>
       <div className="flex items-center gap-4">
-        <ul className="flex gap-4">
+        <ul className="flex md:gap-4 gap-2">
           {routes.map((route) => {
             if (route.href === '/') {
               return (
                 <li
                   key={route.name}
-                  className={`hover:text-black font-medium hover:underline ${
+                  className={`hover:text-black font-medium hover:underline text-sm ${
                     pathname === route.href ? 'text-black' : 'text-gray-400'
                   }`}
                 >
@@ -44,7 +44,7 @@ const Navbar = () => {
               return (
                 <li
                   key={route.name}
-                  className={`hover:text-black font-medium hover:underline ${
+                  className={`hover:text-black font-medium hover:underline text-sm ${
                     pathname.includes(route.href)
                       ? 'text-black'
                       : 'text-gray-400'
