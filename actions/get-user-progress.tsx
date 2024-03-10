@@ -32,6 +32,6 @@ export const getProgress = async (
 
     return progressPercentage
   } catch (err) {
-    console.log('COURSE_PROGRESS', err)
+    throw err
   }
 }

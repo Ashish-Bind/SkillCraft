@@ -36,7 +36,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData?.price || undefined,
+    defaultValues: initialData?.price!,
   })
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
