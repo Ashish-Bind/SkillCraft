@@ -15,7 +15,6 @@ interface CourseCardProps {
 const CourseCard = ({ data }: CourseCardProps) => {
   return (
     <div className="bg-gray-100 border border-gray-300 p-4 rounded-md grid gap-2">
-      <div className="text-lg font-bold line-clamp-2">{data.title}</div>
       <div className="relative aspect-video ">
         {data.imgUrl ? (
           <Image
@@ -30,6 +29,7 @@ const CourseCard = ({ data }: CourseCardProps) => {
           </div>
         )}
       </div>
+      <div className="text-lg font-medium line-clamp-2">{data.title}</div>
       <p className="font-medium text-sm">{formatPrice(data.price ?? 0)}</p>
       <p className="font-medium text-sm">
         <StarRatings ratings={data.rating} />
@@ -39,7 +39,7 @@ const CourseCard = ({ data }: CourseCardProps) => {
           href={`/teacher/course/${data.id}`}
           className="flex gap-2 items-center"
         >
-          <Icon name="Pen" color="white" size={14} /> Edit this course
+          <Icon name="Pen" color="white" size={14} /> Edit course
         </Link>
       </Button>
     </div>

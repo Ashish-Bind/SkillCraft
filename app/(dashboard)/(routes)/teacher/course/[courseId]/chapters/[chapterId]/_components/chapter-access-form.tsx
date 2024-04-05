@@ -60,7 +60,7 @@ const ChapterAccessForm = ({
         `/api/courses/${courseId}/chapters/${chapterId}`,
         values
       )
-      toast.success('Chapter description updated')
+      toast.success('Chapter Access updated')
       toggleEdit()
       router.refresh()
     } catch (error) {

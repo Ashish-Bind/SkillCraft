@@ -4,13 +4,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { UserButton, useUser } from '@clerk/nextjs'
 import Logo from './Logo'
-import { Analytics, Course, Teacher } from './Icon'
 import { Button } from '@/components/ui/button'
 
 const routes = [
   { name: 'Home', href: '/' },
   { name: 'Browse', href: '/courses' },
-  { name: 'My Courses', href: '/my-courses' },
   { name: 'Teacher', href: '/teacher' },
 ]
 
@@ -18,17 +16,21 @@ const Navbar = () => {
   const pathname = usePathname()
   const { isSignedIn, user } = useUser()
 
+  const navRoutes = isSignedIn
+    ? [...routes, { name: 'Learning', href: '/my-courses' }]
+    : [...routes]
+
   return (
     <div className="border border-b-2 p-3 flex justify-between">
       <Link className="flex items-center gap-2" href="/">
         <Logo />
-        <p className="font-bold text-xl">
+        <p className="font-bold md:text-xl">
           Skill<span className="font-normal">Craft</span>
         </p>
       </Link>
       <div className="flex items-center gap-4">
         <ul className="flex md:gap-4 gap-2">
-          {routes.map((route) => {
+          {navRoutes.map((route) => {
             if (route.href === '/') {
               return (
                 <li

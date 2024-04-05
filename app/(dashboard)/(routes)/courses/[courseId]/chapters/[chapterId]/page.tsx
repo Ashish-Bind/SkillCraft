@@ -7,6 +7,10 @@ import { getChapters } from '@/actions/get-chapters'
 import { redirect } from 'next/navigation'
 import { Banner } from '@/components/banner'
 import VideoPlayer from '../_components/video-player'
+import { CourseEnroll } from '../_components/course-enroll'
+import { Preview } from '@/components/preview'
+import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
 
 const ChapterPage = async ({
   params,
@@ -71,7 +75,7 @@ const ChapterPage = async ({
             />
           )}
         </div>
-        <div className="flex flex-col max-w-4xl mx-auto pb-20 p-4">
+        <div className="flex flex-col max-w-4xl mx-auto p-4">
           <VideoPlayer
             chapterId={chapterId}
             title={chapter?.title!}
@@ -82,6 +86,29 @@ const ChapterPage = async ({
             completeOnEnd={completeOnEnd}
           />
         </div>
+        <div className="p-4 flex flex-col md:flex-row items-center justify-between">
+          <div className="font-bold text-2xl">{chapter?.title}</div>
+          {purchase ? (
+            <Badge>Purchased</Badge>
+          ) : (
+            <CourseEnroll courseId={courseId} price={course?.price} />
+          )}
+        </div>
+        <hr />
+        <div>
+          <Preview value={chapter?.description} />
+        </div>
+        {!!attachments?.length && (
+          <div>
+            {attachments.map((file) => (
+              <div>
+                <Link href={file.url} target="_blank" key={file.id}>
+                  {file.name}
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   )
