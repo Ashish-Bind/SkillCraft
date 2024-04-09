@@ -11,6 +11,8 @@ import { CourseEnroll } from '../_components/course-enroll'
 import { Preview } from '@/components/preview'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { File } from 'lucide-react'
+import Icon from '@/components/providers/icons-lucide'
 
 const ChapterPage = async ({
   params,
@@ -98,11 +100,21 @@ const ChapterPage = async ({
         <div>
           <Preview value={chapter?.description} />
         </div>
+        <hr />
         {!!attachments?.length && (
-          <div>
+          <div className="m-4 grid gap-1">
+            <span className="font-semibold">Attachments</span>
             {attachments.map((file) => (
-              <div>
-                <Link href={file.url} target="_blank" key={file.id}>
+              <div
+                key={file.id}
+                className="p-2 border rounded-md text-sm flex gap-2 items-center"
+              >
+                <Icon name="File" size={18} />
+                <Link
+                  href={file.url}
+                  target="_blank"
+                  className="hover:text-orange-600 transition"
+                >
                   {file.name}
                 </Link>
               </div>

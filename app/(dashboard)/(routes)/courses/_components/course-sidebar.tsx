@@ -3,6 +3,8 @@ import { auth } from '@clerk/nextjs'
 import { Chapter, Course, UserProgress } from '@prisma/client'
 import React from 'react'
 import CourseSidebarItem from './course-sidebar-item'
+import Link from 'next/link'
+import CourseProgress from '@/components/course-progress'
 
 interface CourseSidebarProps {
   course: Course & {
@@ -26,7 +28,17 @@ const CourseSidebar = async ({ course, progressCount }: CourseSidebarProps) => {
   return (
     <div className="h-full border-r border-r-gray-300 flex flex-col shadow-sm">
       <div className="p-4 flex flex-col border-b">
-        <h1 className="font-semibold">{course.title}</h1>
+        <Link
+          href={`/courses/${course.id}`}
+          className="font-bold text-orange-600"
+        >
+          {course.title}
+        </Link>
+        {purchase && (
+          <div className="my-4">
+            <CourseProgress value={progressCount} />
+          </div>
+        )}
       </div>
       <div className="flex flex-col w-full">
         {course.chapters.map((chapter) => {

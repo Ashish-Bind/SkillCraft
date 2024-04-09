@@ -6,6 +6,7 @@ import React from 'react'
 import CourseSidebar from '../_components/course-sidebar'
 import CourseMobileSidebar from '../_components/course-mobile-sidebar'
 import Image from 'next/image'
+import { CourseEnroll } from './chapters/_components/course-enroll'
 
 const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth()
@@ -23,6 +24,10 @@ const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
           position: 'asc',
         },
       },
+      purchases: {
+        where: { userId },
+      },
+      attachments: true,
     },
   })
 
@@ -36,26 +41,59 @@ const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
     <>
       <div className="h-full flex">
         <div className="hidden md:flex h-full w-80 flex-col left-0 z-50">
-          <CourseSidebar course={course} />
+          <CourseSidebar course={course} progressCount={progress} />
         </div>
         <div className="md:hidden">
-          <CourseMobileSidebar course={course} />
+          <CourseMobileSidebar course={course} progressCount={progress} />
         </div>
-        <div className="flex flex-col m-6 grow gap-2">
-          <div className="flex">
-            <div className="relative w-3/5 aspect-square  overflow-hidden">
+        <section className="dark:bg-gray-100 dark:text-gray-800 grow">
+          <div className="container flex flex-col justify-center p-6 mx-auto sm:py-12 lg:py-12 lg:flex-row lg:justify-between">
+            <div className="flex flex-col justify-center p-6 text-center rounded-sm lg:max-w-md xl:max-w-lg lg:text-left">
+              <h1 className="text-3xl font-bold leading-none">
+                {course.title}
+              </h1>
+              <p className="my-4 text-sm sm:mb-12 text-gray-500">
+                {course.description}
+              </p>
+              <div className="">
+                <div className="px-6 py-3 border rounded-sm grid gap-2">
+                  <div className="text-orange-600 font-bold">
+                    What's in the course
+                  </div>
+                  <div className="text-sm font-medium text-gray-600">
+                    {course.chapters.length} Chapters
+                  </div>
+                  <div className="text-sm font-medium text-gray-600">
+                    {course?.attachments?.length} Attachments
+                  </div>
+                  <div className="text-sm font-medium text-gray-600">
+                    {course?.purchases.length > 0 ? (
+                      <>
+                        Already Purchased on{' '}
+                        {new Date(
+                          `${course?.purchases[0]?.createdAt}`
+                        ).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </>
+                    ) : (
+                      <CourseEnroll courseId={course.id} price={course.price} />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128 ">
               <img
-                className="object-center rounded-md"
-                alt={course.title}
-                src={course.imgUrl || ''}
+                src={course.imgUrl}
+                alt=""
+                className="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128 rounded-md"
               />
             </div>
-            <div>
-              <div className="text-2xl font-bold">{course.title}</div>
-            </div>
           </div>
-          <div className="text-sm">{course.description}</div>
-        </div>
+        </section>
       </div>
     </>
   )

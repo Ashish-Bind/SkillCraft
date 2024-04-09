@@ -6,8 +6,10 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
+    const { price } = await req.json()
+
     const options = {
-      amount: 500 * 100,
+      amount: price * 100,
       currency: 'INR',
       receipt: 'receipt#1',
     }

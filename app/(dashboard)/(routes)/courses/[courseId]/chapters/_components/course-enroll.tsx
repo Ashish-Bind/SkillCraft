@@ -13,7 +13,9 @@ interface CourseEnrollProps {
 export const CourseEnroll = ({ courseId, price }: CourseEnrollProps) => {
   const router = useRouter()
   const handleEnroll = async () => {
-    const { data } = await axios.post(`/api/courses/${courseId}/checkout`)
+    const { data } = await axios.post(`/api/courses/${courseId}/checkout`, {
+      price,
+    })
 
     /**
      * {
