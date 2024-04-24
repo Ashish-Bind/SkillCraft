@@ -11,8 +11,9 @@ import { CourseEnroll } from '../_components/course-enroll'
 import { Preview } from '@/components/preview'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { File } from 'lucide-react'
 import Icon from '@/components/providers/icons-lucide'
+import CourseProgressButton from '../_components/course-progress-button'
+import { getProgress } from '@/actions/get-user-progress'
 
 const ChapterPage = async ({
   params,
@@ -54,13 +55,15 @@ const ChapterPage = async ({
   const isLocked = !chapter?.isFree && !purchase
   const completeOnEnd = !!purchase && !userProgress?.isCompleted
 
+  const progress = await getProgress(userId, params.courseId)
+
   return (
     <div className="h-full md:flex">
       <div className="hidden md:flex h-full w-96 flex-col left-0 z-50">
-        <CourseSidebar course={course} />
+        <CourseSidebar course={course} progressCount={progress} />
       </div>
       <div className="md:hidden border-b border-gray-300">
-        <CourseMobileSidebar course={course} />
+        <CourseMobileSidebar course={course} progressCount={progress} />
       </div>
       <main className="h-full w-full">
         <div>
@@ -91,7 +94,15 @@ const ChapterPage = async ({
         <div className="p-4 flex flex-col md:flex-row items-center justify-between">
           <div className="font-bold text-2xl">{chapter?.title}</div>
           {purchase ? (
-            <Badge>Purchased</Badge>
+            <div className="flex gap-4 items-center">
+              <Badge>Purchased</Badge>
+              <CourseProgressButton
+                chapterId={chapterId}
+                courseId={courseId}
+                nextChapterId={nextChapter}
+                isCompleted={!!userProgress?.isCompleted}
+              />
+            </div>
           ) : (
             <CourseEnroll courseId={courseId} price={course?.price} />
           )}

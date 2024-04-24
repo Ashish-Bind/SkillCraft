@@ -1,12 +1,15 @@
+'use client'
+
 import { Rating } from '@prisma/client'
 import ReactStars from 'react-stars'
 import React from 'react'
 
 interface StarRatings {
   ratings: Rating[]
+  size?: number
 }
 
-const StarRatings = ({ ratings }: StarRatings) => {
+const StarRatings = ({ ratings, size = 24 }: StarRatings) => {
   const users = ratings.length
   const rating = ratings.reduce((acc, val) => {
     return acc + val.rating
@@ -16,8 +19,8 @@ const StarRatings = ({ ratings }: StarRatings) => {
 
   return (
     <div className="flex gap-1 items-center">
-      <ReactStars count={5} value={averageRating} size={24} edit={false} />
-      <span>({users} ratings)</span>
+      <ReactStars count={5} value={averageRating} size={size} edit={false} />
+      <span className="text-sm">({users} ratings)</span>
     </div>
   )
 }

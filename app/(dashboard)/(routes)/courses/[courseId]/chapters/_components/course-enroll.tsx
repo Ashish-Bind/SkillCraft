@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import formatPrice from '@/lib/format'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 interface CourseEnrollProps {
   courseId: string
@@ -49,17 +50,12 @@ export const CourseEnroll = ({ courseId, price }: CourseEnrollProps) => {
             { ...response, courseId }
           )
           console.log(data)
+          toast.success('Purchase Successful!')
           router.refresh()
         } catch (error) {
+          toast.error('Payment Failed')
           console.log(error)
         }
-      },
-
-      prefill: {
-        contact: '9000090000', //Provide the customer's phone number for better conversion rates
-      },
-      notes: {
-        address: 'Razorpay Corporate Office',
       },
       theme: {
         color: '#3399cc',

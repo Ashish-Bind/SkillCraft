@@ -2,11 +2,10 @@ import { getProgress } from '@/actions/get-user-progress'
 import { db } from '@/lib/db'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
-import React from 'react'
 import CourseSidebar from '../_components/course-sidebar'
 import CourseMobileSidebar from '../_components/course-mobile-sidebar'
-import Image from 'next/image'
 import { CourseEnroll } from './chapters/_components/course-enroll'
+import FeedbackForm from '@/components/feedback-form'
 
 const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth()
@@ -28,6 +27,7 @@ const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
         where: { userId },
       },
       attachments: true,
+      rating: true,
     },
   })
 
@@ -37,13 +37,15 @@ const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
 
   const progress = await getProgress(userId, params.courseId)
 
+  const userRating = course.rating.filter((rate) => rate.userId === userId)
+
   return (
     <>
-      <div className="h-full flex">
+      <div className="h-full md:flex">
         <div className="hidden md:flex h-full w-80 flex-col left-0 z-50">
           <CourseSidebar course={course} progressCount={progress} />
         </div>
-        <div className="md:hidden">
+        <div className="md:hidden border-b border-gray-300">
           <CourseMobileSidebar course={course} progressCount={progress} />
         </div>
         <section className="dark:bg-gray-100 dark:text-gray-800 grow">
@@ -83,9 +85,33 @@ const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
                     )}
                   </div>
                 </div>
+                {course?.purchases.length > 0 && userRating.length == 0 ? (
+                  <div className="border px-4 py-2 my-2 rounded-md">
+                    <div className="text-orange-600 font-bold">
+                      Give us a feedback
+                    </div>
+                    <FeedbackForm courseId={course.id} userId={userId!} />
+                  </div>
+                ) : (
+                  course?.purchases.length > 0 && (
+                    <div className="my-2 text-orange-600 font-medium text-sm">
+                      *Already filled feedback
+                    </div>
+                  )
+                )}
+                <div className="border px-4 py-2 my-2 rounded-md">
+                  <div className="text-orange-600 font-bold">
+                    Recent reviews and feedbacks
+                  </div>
+                  {course?.rating.map((rate, i) => (
+                    <div key={rate.id} className="text-sm text-gray-600">
+                      {i + 1}. {rate.feedback}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128 ">
+            <div className="flex flex-col items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128 ">
               <img
                 src={course.imgUrl}
                 alt=""

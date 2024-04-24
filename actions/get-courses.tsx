@@ -44,6 +44,7 @@ export const getCourses = async ({
             userId,
           },
         },
+        rating: true,
       },
       orderBy: {
         createdAt: 'desc',

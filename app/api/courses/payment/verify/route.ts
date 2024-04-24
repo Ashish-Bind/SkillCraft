@@ -25,11 +25,12 @@ export async function POST(req: NextRequest) {
           courseId,
         },
       })
+
       return new NextResponse('Payment Verified', { status: 200 })
     } else {
-      return new NextResponse('Invalid Signature', { status: 400 })
+      return new NextResponse('Invalid Signature', { status: 401 })
     }
   } catch (error) {
-    return NextResponse.json({ message: 'Internal Server Error!' })
+    return new NextResponse('Internal Error', { status: 500 })
   }
 }

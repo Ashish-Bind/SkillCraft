@@ -30,14 +30,16 @@ const MyCourses = async () => {
       category: true,
     },
   })
+  const progressData = await Promise.all(
+    courses.map((course) => getProgress(userId, course.id))
+  )
 
   return (
     <div className="p-6 grid gap-4">
       <div className="font-bold text-2xl">Your Purchases</div>
       <div>
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {courses.map(async (item) => {
-            const progress = await getProgress(userId, item.id)
+          {courses.map((item, i) => {
             return (
               <CourseCard
                 key={item.id}
@@ -46,7 +48,7 @@ const MyCourses = async () => {
                 id={item.id}
                 imageUrl={item.imgUrl!}
                 price={item.price!}
-                progress={progress}
+                progress={progressData[i]}
                 title={item.title}
               />
             )

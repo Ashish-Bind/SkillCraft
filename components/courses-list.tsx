@@ -26,6 +26,7 @@ const CoursesList = ({ items }: CoursesProps) => {
               price={item.price}
               progress={item.progress}
               title={item.title}
+              rating={item.rating}
             />
           )
         })}

@@ -151,4 +151,6 @@ model Rating {
   feedback String?
 
   createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
 }

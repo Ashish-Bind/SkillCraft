@@ -1,9 +1,10 @@
 import React from 'react'
-import { Course } from '@prisma/client'
+import { Course, Rating } from '@prisma/client'
 import Link from 'next/link'
 import Image from 'next/image'
 import { BookOpen } from 'lucide-react'
 import formatPrice from '@/lib/format'
+import StarRatings from './star-ratings'
 
 interface CourseCard {
   id: string
@@ -13,6 +14,7 @@ interface CourseCard {
   price: number
   progress: number | null
   category: string
+  rating: Rating[]
 }
 
 const CourseCard = ({
@@ -23,6 +25,7 @@ const CourseCard = ({
   price,
   progress,
   category,
+  rating,
 }: CourseCard) => {
   return (
     <Link href={`/courses/${id}`}>
@@ -34,7 +37,7 @@ const CourseCard = ({
           <div className="text-lg md:text-base font-medium group-hover:text-orange-600">
             {title}
           </div>
-          <p className="text-xs text-muted-foreground">{category}</p>
+          <p className="text-xs text-muted-foreground font-bold">{category}</p>
           <div className="my-2 flex items-center gap-1 text-sm">
             <div className="flex items-center text-gray-500 gap-2">
               <BookOpen color="orange" size={16} />
@@ -44,6 +47,7 @@ const CourseCard = ({
               </span>
             </div>
           </div>
+          <StarRatings ratings={rating} size={20} />
           <p className="text-md font-medium">{formatPrice(price)}</p>
         </div>
       </div>
