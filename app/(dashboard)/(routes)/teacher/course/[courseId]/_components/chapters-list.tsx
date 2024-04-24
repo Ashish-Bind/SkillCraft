@@ -29,7 +29,7 @@ const ChaptersList = ({
 
   useEffect(() => {
     setIsMounted(true)
-  })
+  }, [])
 
   useEffect(() => {
     setChapters(items)

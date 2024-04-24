@@ -60,7 +60,7 @@ const SingleCourse = async ({ params }: { params: { courseId: string } }) => {
               <div className="">
                 <div className="px-6 py-3 border rounded-sm grid gap-2">
                   <div className="text-orange-600 font-bold">
-                    What's in the course
+                    What&apos;s in the course
                   </div>
                   <div className="text-sm font-medium text-gray-600">
                     {course.chapters.length} Chapters
