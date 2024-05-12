@@ -7,6 +7,8 @@ A LMS(Learning Management Sytem) made using Next JS, React JS, Prisma, Tailwind 
 - Payment Gateway Integration
 - File upload functionality
 
+- [Demo of the project](https://www.linkedin.com/feed/update/urn:li:activity:7191429173104545793/)
+
 ![Screenshot 2024-03-08 205540](https://github.com/Ashish-Bind/SkillCraft/assets/121487855/90db868f-e3aa-4233-98da-1886b38563fd)
 ![Screenshot 2024-03-08 205553](https://github.com/Ashish-Bind/SkillCraft/assets/121487855/7523468d-cfa4-45ac-9c8a-04c11f4e9749)
 ![Screenshot_8-3-2024_205625_localhost](https://github.com/Ashish-Bind/SkillCraft/assets/121487855/306a1314-5a72-4024-9193-52fd62c7384b)
